@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Rutas en Moto – Cangas de Onís</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <style>
+        body { margin: 0; font-family: Arial, sans-serif; }
+        #map { height: 100vh; width: 100%; }
+        .legend {
+            background: white;
+            padding: 10px;
+            line-height: 1.5em;
+            font-size: 14px;
+        }
+        .legend span {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            margin-right: 6px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="map"></div>
+
+<script>
+    // Mapa base centrado en Cangas de Onís
+    const map = L.map('map').setView([43.351, -5.128], 9);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap'
+    }).addTo(map);
+
+    // Punto de inicio
+    const llenin = [43.351, -5.128];
+    L.marker(llenin).addTo(map).bindPopup("Llenín – Cangas de Onís");
+
+    // RUTAS (aproximadas)
+    const rutas = [
+        {
+            nombre: "Día 1 – Desfiladero de los Beyos y Riaño",
+            color: "red",
+            puntos: [
+                llenin,
+                [43.187, -5.079], // Beyos
+                [43.002, -5.003], // Pontón
+                [42.977, -5.012], // Riaño
+                llenin
+            ]
+        },
+        {
+            nombre: "Día 2 – Picos de Europa / Cares",
+            color: "blue",
+            puntos: [
+                llenin,
+                [43.308, -4.776], // Panes
+                [43.295, -4.805], // Poncebos
+                [43.246, -4.889], // Caín
+                llenin
+            ]
+        },
+        {
+            nombre: "Día 3 – Desfiladero de la Hermida y Liébana",
+            color: "green",
+            puntos: [
+                llenin,
+                [43.308, -4.776], // Panes
+                [43.215, -4.621], // Hermida
+                [43.155, -4.622], // Potes
+                llenin
+            ]
+        },
+        {
+            nombre: "Día 4 – Puertos de San Isidro y Tarna",
+            color: "orange",
+            puntos: [
+                llenin,
+                [43.038, -5.188], // Tarna
+                [43.053, -5.431], // San Isidro
+                llenin
+            ]
+        },
+        {
+            nombre: "Día 5 – Redes y Senda del Oso",
+            color: "purple",
+            puntos: [
+                llenin,
+                [43.259, -5.873], // Proaza
+                [43.140, -5.354], // Caso
+                llenin
+            ]
+        }
+    ];
+
+    // Dibujar rutas
+    rutas.forEach(ruta => {
+        L.polyline(ruta.puntos, {
+            color: ruta.color,
+            weight: 5,
+            opacity: 0.85
+        }).addTo(map).bindPopup(ruta.nombre);
+    });
+
+    // Leyenda
+    const legend = L.control({ position: "bottomright" });
+
+    legend.onAdd = function () {
+        const div = L.DomUtil.create("div", "legend");
+        div.innerHTML = `
+            <strong>Rutas en moto</strong><br>
+            <span style="background:red"></span>Día 1 – Beyos & Riaño<br>
+            <span style="background:blue"></span>Día 2 – Picos / Cares<br>
+            <span style="background:green"></span>Día 3 – Hermida & Liébana<br>
+            <span style="background:orange"></span>Día 4 – San Isidro & Tarna<br>
+            <span style="background:purple"></span>Día 5 – Redes & Senda del Oso
+        `;
+        return div;
+    };
+
+    legend.addTo(map);
+</script>
+
+</body>
+</html>
